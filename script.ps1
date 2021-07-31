@@ -69,12 +69,13 @@ $LoaderThreads = [System.Collections.ArrayList]@()
 for ($i = 1, $i -le $script:config.ThreadCounts.Loader, $i++)
 {
     $ThreadId = "LoaderThread_$i"
-    $LoaderThread = Start-ThreadJob -Name $ThreadId -ArgumentList $ThreadId, $LogCollection, $WarningCollection, $ErrorCollection, $script:config -ScriptBlock {
+    $LoaderThread = Start-ThreadJob -Name $ThreadId -ArgumentList $ThreadId, $LogCollection, $WarningCollection, $ErrorCollection, $script:config, $InputQueue -ScriptBlock {
         $ThreadId = $args[0]
         $LogCollection = $args[1]
         $WarningCollection = $args[2]
         $ErrorCollection = $args[3]
         $config = $args[4]
+        $InputQueue = $args[5]
 
         #todo
     }
@@ -87,12 +88,14 @@ $WorkerThreads = [System.Collections.ArrayList]@()
 for ($i = 1, $i -le $script:config.ThreadCounts.Worker, $i++)
 {
     $ThreadId = "WorkerThread_$i"
-    $WorkerThread = Start-ThreadJob -Name $ThreadId -ArgumentList $ThreadId, $LogCollection, $WarningCollection, $ErrorCollection, $script:config -ScriptBlock {
+    $WorkerThread = Start-ThreadJob -Name $ThreadId -ArgumentList $ThreadId, $LogCollection, $WarningCollection, $ErrorCollection, $script:config, $InputQueue, $OutputQueue -ScriptBlock {
         $ThreadId = $args[0]
         $LogCollection = $args[1]
         $WarningCollection = $args[2]
         $ErrorCollection = $args[3]
         $config = $args[4]
+        $InputQueue = $args[5]
+        $OutputQueue = $args[6]
 
         #todo
     }
@@ -105,12 +108,13 @@ $RecorderThreads = [System.Collections.ArrayList]@()
 for ($i = 1, $i -le $script:config.ThreadCounts.Recorder, $i++)
 {
     $ThreadId = "RecorderThread_$i"
-    $RecorderThread = Start-ThreadJob -Name $ThreadId -ArgumentList $ThreadId, $LogCollection, $WarningCollection, $ErrorCollection, $script:config -ScriptBlock {
+    $RecorderThread = Start-ThreadJob -Name $ThreadId -ArgumentList $ThreadId, $LogCollection, $WarningCollection, $ErrorCollection, $script:config, $OutputQueue -ScriptBlock {
         $ThreadId = $args[0]
         $LogCollection = $args[1]
         $WarningCollection = $args[2]
         $ErrorCollection = $args[3]
         $config = $args[4]
+        $OutputQueue = $args[5]
 
         #todo
     }
