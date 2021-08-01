@@ -30,8 +30,8 @@ $LogCollection      = [System.Collections.Concurrent.BlockingCollection[psobject
 $ErrorCollection    = [System.Collections.Concurrent.BlockingCollection[psobject]]@{}
 $WarningCollection  = [System.Collections.Concurrent.BlockingCollection[psobject]]@{}
 
-# Start Info Logger Thread
-$LoggerThread = Start-ThreadJob -Name "InfoLogger" -ArgumentList $LogCollection, $script:config -ScriptBlock {
+# Start Info Logger Thread and set throttle limit (global to PS session; typically number of cores available + 1 for each logger thread and output thread. Ensure Config distributes threads between worker types effectively. )
+$LoggerThread = Start-ThreadJob -Name "InfoLogger" -ThrottleLimit ($env:NUMBER_OF_PROCESSORS + $script:config.BonusThreads )-ArgumentList $LogCollection, $script:config -ScriptBlock {
     $LogCollection = $args[0]
     $config = $args[1]
 
