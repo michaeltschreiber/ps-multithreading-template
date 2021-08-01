@@ -153,3 +153,8 @@ Wait-Job $ErrorThread
 Wait-Job $WarningThread
 
 #endregion Procedure
+
+#region options
+#todo consider combining logger threads into a single thread (if taking advantage of throttle limit param)
+    #to do so, use only the error stream, and override error message when logging non errors. override logentrytype param to log different error types.
+#endregion
