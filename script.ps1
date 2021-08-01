@@ -77,8 +77,9 @@ for ($i = 1, $i -le $script:config.ThreadCounts.Loader, $i++)
         $config = $args[4]
         $InputQueue = $args[5]
 
-        #todo
-        # Process $Input
+        #Interface : Load from {source} , logging to log collections and emiting objects to InputQueue
+        . .\LoaderThreadDefinition.ps1 #todo
+        
 
     [void] $LoaderThreads.Add($LoaderThread)
     }
@@ -97,7 +98,8 @@ for ($i = 1, $i -le $script:config.ThreadCounts.Worker, $i++)
         $InputQueue = $args[5]
         $OutputQueue = $args[6]
 
-        #todo
+        #Interface : Transform objects from input queue into output queue objects, logging to log collections
+        . .\WorkerThreadDefinition.ps1 #todo
     }
 
     [void] $WorkerThreads.Add($WorkerThread)
@@ -116,7 +118,8 @@ for ($i = 1, $i -le $script:config.ThreadCounts.Recorder, $i++)
         $config = $args[4]
         $OutputQueue = $args[5]
 
-        #todo
+        #Interface : Transform objects from output queue into records in {target}, logging to log collections
+        . .\RecorderThreadDefinition.ps1
     }
 
     [void] $RecorderThreads.add($RecorderThread)
