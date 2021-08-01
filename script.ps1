@@ -65,6 +65,8 @@ $WarningThread = Start-ThreadJob -Name "WarningLogger" -ArgumentList $WarningCol
 
 # Define Loader Threads : Adds Work Items to Input Queue (typical to use a single loader or manually divide input and assign chunks)
 
+#todo create local queue of work segments to dispatch to loader threads; input object is LoadQueue.Dequeue()
+
 $LoaderThreads = [System.Collections.ArrayList]@()
 for ($i = 1, $i -le $script:config.ThreadCounts.Loader, $i++)
 {
