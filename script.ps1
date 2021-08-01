@@ -69,7 +69,7 @@ $LoaderThreads = [System.Collections.ArrayList]@()
 for ($i = 1, $i -le $script:config.ThreadCounts.Loader, $i++)
 {
     $ThreadId = "LoaderThread_$i"
-    $LoaderThread = Start-ThreadJob -Name $ThreadId -ArgumentList $ThreadId, $LogCollection, $WarningCollection, $ErrorCollection, $script:config, $InputQueue -ScriptBlock {
+    $LoaderThread = Start-ThreadJob -Name $ThreadId -StreamingHost $Host -InputObject $XXX -ArgumentList $ThreadId, $LogCollection, $WarningCollection, $ErrorCollection, $script:config, $InputQueue -ScriptBlock {
         $ThreadId = $args[0]
         $LogCollection = $args[1]
         $WarningCollection = $args[2]
@@ -78,17 +78,17 @@ for ($i = 1, $i -le $script:config.ThreadCounts.Loader, $i++)
         $InputQueue = $args[5]
 
         #todo
-    }
+        # Process $Input
 
     [void] $LoaderThreads.Add($LoaderThread)
+    }
 }
-
 # Define Worker Threads: Takes Objects From Input Queue and emits objects in output queue
 $WorkerThreads = [System.Collections.ArrayList]@()
 for ($i = 1, $i -le $script:config.ThreadCounts.Worker, $i++)
 {
     $ThreadId = "WorkerThread_$i"
-    $WorkerThread = Start-ThreadJob -Name $ThreadId -ArgumentList $ThreadId, $LogCollection, $WarningCollection, $ErrorCollection, $script:config, $InputQueue, $OutputQueue -ScriptBlock {
+    $WorkerThread = Start-ThreadJob -Name $ThreadId -StreamingHost $Host -ArgumentList $ThreadId, $LogCollection, $WarningCollection, $ErrorCollection, $script:config, $InputQueue, $OutputQueue -ScriptBlock {
         $ThreadId = $args[0]
         $LogCollection = $args[1]
         $WarningCollection = $args[2]
@@ -108,7 +108,7 @@ $RecorderThreads = [System.Collections.ArrayList]@()
 for ($i = 1, $i -le $script:config.ThreadCounts.Recorder, $i++)
 {
     $ThreadId = "RecorderThread_$i"
-    $RecorderThread = Start-ThreadJob -Name $ThreadId -ArgumentList $ThreadId, $LogCollection, $WarningCollection, $ErrorCollection, $script:config, $OutputQueue -ScriptBlock {
+    $RecorderThread = Start-ThreadJob -Name $ThreadId -StreamingHost $Host -ArgumentList $ThreadId, $LogCollection, $WarningCollection, $ErrorCollection, $script:config, $OutputQueue -ScriptBlock {
         $ThreadId = $args[0]
         $LogCollection = $args[1]
         $WarningCollection = $args[2]
